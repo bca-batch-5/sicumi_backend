@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sicumi.project.sicumi.exception.custom.CustomNullException;
 import com.sicumi.project.sicumi.model.User;
+import com.sicumi.project.sicumi.model.dto.ChangePasswordRequest;
+import com.sicumi.project.sicumi.model.dto.EmailRequest;
 import com.sicumi.project.sicumi.model.dto.LoginRequest;
 import com.sicumi.project.sicumi.model.dto.NewUserRequest;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
@@ -45,17 +47,35 @@ public class UserServicesImpl implements UserServices {
   return responseData;
 }
 
-@Override
-public ResponseData<Object> createNewUser(NewUserRequest signUpData) throws CustomNullException {
+  @Override
+  public ResponseData<Object> createNewUser(NewUserRequest signUpData) throws CustomNullException {
   userList = new ArrayList<>(userRepository.findByEmail(signUpData.getEmail()));
   userValidator.availableEmailValidation(userList);
 
-  user = new User(signUpData.getName(), signUpData.getEmail(), signUpData.getPassword());
+  user = new User(signUpData.getName(), signUpData.getEmail(), signUpData.getPassword(), signUpData.getPin());
   userRepository.save(user);
 
   responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Signup Success", user);
   return responseData;
-  }
+}
 
+@Override
+public ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) throws CustomNullException {
+  userList = new ArrayList<>(userRepository.findByEmail(resetPassword.getEmail()));
+  userList = new ArrayList<>(userRepository.findByEmail(resetPassword.getEmail()));
+  user = userList.get(0);
+  user.setPassword(resetPassword.getPassword());
+  userRepository.save(user);
   
+  responseData = new ResponseData<Object>(HttpStatus.ACCEPTED.value(), "Reset Password Success", user);
+  return responseData;
+}
+
+@Override
+public ResponseData<Object> findEmail(EmailRequest email) throws CustomNullException {
+  userList = new ArrayList<>(userRepository.findByEmail(email.getEmail()));
+  userValidator.findEmailValidation(userList);
+  responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Email Found", email);
+  return responseData;
+}
 }

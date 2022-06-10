@@ -26,14 +26,15 @@ public class User {
   private String password;
 
   @Column(nullable = true)
-  private Integer pin;
+  private String pin;
 
   private Boolean isActive = true;
 
-  public User( String name, String email, String password){
+  public User( String name, String email, String password, String pin){
     this.name = name;
     this.email = email;
     this.password = password;
+    this.pin = pin;
   }
 
   public User(){}

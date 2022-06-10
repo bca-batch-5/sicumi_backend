@@ -9,11 +9,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class NewUserRequest {
+public class ChangePasswordRequest {
   
-  @NotEmpty(message = "Your Name is Required")
-  private String name;
-
   @Email(message = "Email must be contain @ and .[com]")
   @NotEmpty(message = "Email is required")
   private String email;
@@ -21,7 +18,4 @@ public class NewUserRequest {
   @NotEmpty(message = "Password is required")
   @Size(min = 8, max = 30, message = "Password length must between 8 and 20 characters")
   private String password;
-
-  @NotEmpty(message = "Pin is required")
-  private String pin;
 }
