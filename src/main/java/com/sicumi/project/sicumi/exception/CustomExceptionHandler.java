@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class CustomExceptionHandler {
     private ErrorMessage errorMessage;
 
-    @ExceptionHandler(value = DataNotFoundException.class)
-    public ResponseEntity<ErrorMessage> dataNotFound(DataNotFoundException exception) {
-        errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), new Date(), exception.getMessage());
-        return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
-    }
-
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorMessage> globaException(Exception exception) {
         errorMessage = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), new Date(), exception.getMessage());
@@ -26,6 +20,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorMessage> globalRuntimeExcEntity(RuntimeException exception) {
         errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), new Date(), exception.getMessage());
+        return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
+    }
+
+    @ExceptionHandler(value = DataNotFoundException.class)
+    public ResponseEntity<ErrorMessage> dataNotFound(DataNotFoundException exception) {
+        errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), new Date(), exception.getMessage());
         return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
     }
 }

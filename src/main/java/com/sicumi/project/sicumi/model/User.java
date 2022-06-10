@@ -35,12 +35,13 @@ public class User {
     private String password;
 
     @Column(nullable = true, length = 6)
-    private int pin;
+    private Integer pin;
 
     @Column(nullable = true, length = 13)
-    private int phone;
+    private String phone;
 
-    public User(String email, String username, String firstname, String lastname, String password, int pin, int phone) {
+    public User(String email, String username, String firstname, String lastname, String password, int pin,
+            String phone) {
         this.email = email;
         this.username = username;
         this.firstname = firstname;
@@ -51,5 +52,6 @@ public class User {
     }
 
     private Boolean isDeleted = false;
+    private String Photo;
 
 }

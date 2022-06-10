@@ -27,7 +27,7 @@ public class UserController {
     public ResponseEntity<?> updateInfo(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updateInfo(id, dto);
-        return ResponseEntity.ok(userService.updateInfo(id, dto));
+        return ResponseEntity.ok(responseData);
 
     }
 
@@ -35,7 +35,7 @@ public class UserController {
     public ResponseEntity<?> updatePassword(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updatePassword(id, dto);
-        return ResponseEntity.ok(userService.updatePassword(id, dto));
+        return ResponseEntity.ok(responseData);// dicek ulang
 
     }
 
@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<?> updatePin(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updatePin(id, dto);
-        return ResponseEntity.ok(userService.updatePin(id, dto));
+        return ResponseEntity.ok(responseData);
 
     }
 
@@ -51,7 +51,15 @@ public class UserController {
     public ResponseEntity<?> updatePhone(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updatePhone(id, dto);
-        return ResponseEntity.ok(userService.updatePhone(id, dto));
+        return ResponseEntity.ok(responseData);
+
+    }
+
+    @PutMapping("/{id}/photo")
+    public ResponseEntity<?> updatePhoto(@PathVariable Integer id, @RequestBody UserDto dto) {
+
+        responseData = userService.updatePhoto(id, dto);
+        return ResponseEntity.ok(responseData);
 
     }
 
@@ -59,7 +67,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
 
         responseData = userService.deleteUser(id);
-        return ResponseEntity.ok(userService.deleteUser(id));
+        return ResponseEntity.ok(responseData);
 
     }
 }

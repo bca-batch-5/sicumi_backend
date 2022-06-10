@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData<Object> updatePassword(int id, UserDto dto) {
         Optional<User> userOpt = userRepository.findById(id);
-        return userValidator.updatePasswordValidation(userOpt, dto);
+        ResponseData<Object> responseData = userValidator.updatePasswordValidation(userOpt, dto);
+        return responseData;
     }
 
     @Override
@@ -49,8 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseData<Object> updatePhoto(int id, UserDto dto) {
-        // TODO Auto-generated method stub
-        return null;
+        Optional<User> userOpt = userRepository.findById(id);
+        return userValidator.updatePhotoValidation(userOpt, dto);
     }
 
     @Override
