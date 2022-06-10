@@ -14,34 +14,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
-
 @Service
 public class UserValidator {
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     private ResponseData<Object> responseData;
     private Map<String, Object> responseMap = new HashMap<>();
 
     public ResponseData<Object> updateInfoValidation(Optional<User> userOpt, UserDto dto) {
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-
-            User result = modelMapper.map(dto, User.class);
-            result.setId(user.getId());
-            result.setIsDeleted(user.getIsDeleted());
-            result.setPassword(user.getPassword());
-            result.setPhone(user.getPhone());
-            result.setPin(user.getPin());
-            result.setUsername(user.getUsername());
-
-            userRepository.save(result);
+        User user = userOpt.get();
+        if (userOpt.isPresent()) { // eror
+            user.setFirstname(dto.getFirstname());
+            user.setLastname(dto.getLastname());
+            user.setEmail(dto.getEmail());
+            userRepository.save(user);
             responseMap = new HashMap<>();
 
             responseMap.put("First Name", user.getFirstname());
@@ -56,14 +44,31 @@ public class UserValidator {
     }
 
     public ResponseData<Object> updatePasswordValidation(Optional<User> userOpt, UserDto dto) {
-
+        User user = userOpt.get();
         if (userOpt.isPresent()) {
-            User user = userOpt.get();
 
-            user.setPassword(dto.getPassword());
-            userRepository.save(user);
-            responseData = new ResponseData<>(HttpStatus.OK.value(), "update password success", user.getPassword());
-            return responseData;
+            if (dto.getCurrentpassword().equals(user.getPassword())) {
+                if (dto.getNewpassword().equals(dto.getRenewpassword())) {
+                    user.setPassword(dto.getRenewpassword());
+                    userRepository.save(user);
+
+                    responseData = new ResponseData<>(HttpStatus.OK.value(), "update password success",
+                            user.getPassword());
+
+                    return responseData;
+                } else {
+                    responseData = new ResponseData<>(HttpStatus.BAD_REQUEST.value(),
+                            "please enter the same password",
+                            null);
+                    return responseData;
+                }
+
+            } else {
+                responseData = new ResponseData<>(HttpStatus.BAD_REQUEST.value(), "please enter your current password",
+                        null);
+                return responseData;
+            }
+
         } else {
             throw new DataNotFoundException("user is not found");
         }
@@ -73,8 +78,10 @@ public class UserValidator {
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
+            Integer pin = Integer.parseInt(
+                    dto.getPin1() + dto.getPin2() + dto.getPin3() + dto.getPin4() + dto.getPin5() + dto.getPin6());
 
-            user.setPin(dto.getPin());
+            user.setPin(pin);
             userRepository.save(user);
             responseData = new ResponseData<>(HttpStatus.OK.value(), "update pin success", user.getPin());
             return responseData;
@@ -91,6 +98,20 @@ public class UserValidator {
             user.setPhone(dto.getPhone());
             userRepository.save(user);
             responseData = new ResponseData<>(HttpStatus.OK.value(), "update phone number success", user.getPhone());
+            return responseData;
+        } else {
+            throw new DataNotFoundException("user is not found");
+        }
+    }
+
+    public ResponseData<Object> updatePhotoValidation(Optional<User> userOpt, UserDto dto) {
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            user.setPhoto(dto.getPhoto());
+            userRepository.save(user);
+            responseData = new ResponseData<>(HttpStatus.OK.value(), "update photo success", user.getPhoto());
             return responseData;
         } else {
             throw new DataNotFoundException("user is not found");
