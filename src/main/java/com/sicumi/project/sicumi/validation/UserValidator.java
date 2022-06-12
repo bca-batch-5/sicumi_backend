@@ -2,8 +2,10 @@ package com.sicumi.project.sicumi.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sicumi.project.sicumi.exception.CustomNullException;
 import com.sicumi.project.sicumi.exception.DataNotFoundException;
 import com.sicumi.project.sicumi.model.User;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
@@ -46,10 +48,13 @@ public class UserValidator {
     public ResponseData<Object> updatePasswordValidation(Optional<User> userOpt, UserDto dto) {
         User user = userOpt.get();
         if (userOpt.isPresent()) {
-
-            if (dto.getCurrentpassword().equals(user.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            if (passwordEncoder.matches(dto.getCurrentpassword(), user.getPassword())) {
                 if (dto.getNewpassword().equals(dto.getRenewpassword())) {
-                    user.setPassword(dto.getRenewpassword());
+                    String password = dto.getRenewpassword();
+
+                    String hashedPassword = passwordEncoder.encode(password);
+                    user.setPassword(hashedPassword);
                     userRepository.save(user);
 
                     responseData = new ResponseData<>(HttpStatus.OK.value(), "update password success",
@@ -104,20 +109,6 @@ public class UserValidator {
         }
     }
 
-    public ResponseData<Object> updatePhotoValidation(Optional<User> userOpt, UserDto dto) {
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-
-            user.setPhoto(dto.getPhoto());
-            userRepository.save(user);
-            responseData = new ResponseData<>(HttpStatus.OK.value(), "update photo success", user.getPhoto());
-            return responseData;
-        } else {
-            throw new DataNotFoundException("user is not found");
-        }
-    }
-
     public ResponseData<Object> deleteUserValidation(Optional<User> userOpt) {
 
         if (userOpt.isPresent()) {
@@ -139,6 +130,13 @@ public class UserValidator {
         } else {
 
             throw new DataNotFoundException("username is not found");
+        }
+    }
+
+    public void notFoundUserValidation(Optional<User> userFind) throws CustomNullException {
+        if (userFind.isEmpty()) {
+            // if (userFind == null) {
+            throw new CustomNullException("User not found.");
         }
     }
 

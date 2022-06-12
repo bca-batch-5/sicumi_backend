@@ -12,8 +12,6 @@ public interface UserService {
 
     ResponseData<Object> updatePhone(int id, UserDto dto);
 
-    ResponseData<Object> updatePhoto(int id, UserDto dto);
-
     ResponseData<Object> deleteUser(int id);
 
 }

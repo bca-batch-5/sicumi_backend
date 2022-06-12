@@ -49,12 +49,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseData<Object> updatePhoto(int id, UserDto dto) {
-        Optional<User> userOpt = userRepository.findById(id);
-        return userValidator.updatePhotoValidation(userOpt, dto);
-    }
-
-    @Override
     public ResponseData<Object> deleteUser(int id) {
         Optional<User> userOpt = userRepository.findById(id);
         return userValidator.deleteUserValidation(userOpt);

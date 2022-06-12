@@ -28,4 +28,22 @@ public class CustomExceptionHandler {
         errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), new Date(), exception.getMessage());
         return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
     }
+
+    @ExceptionHandler(value = FileStorageException.class)
+    public ResponseEntity<?> handleFileStorageException(FileStorageException exception) {
+        errorMessage = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), new Date(), exception.getMessage());
+        return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
+    }
+
+    @ExceptionHandler(value = CustomNullException.class)
+    public ResponseEntity<?> handleNullException(CustomNullException exception) {
+        errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND.value(), new Date(), exception.getMessage());
+        return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
+    }
+
+    @ExceptionHandler(value = CustomUnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(CustomUnauthorizedException exception) {
+        errorMessage = new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), new Date(), exception.getMessage());
+        return ResponseEntity.status(errorMessage.getStatus()).body(errorMessage);
+    }
 }
