@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.sicumi.project.sicumi.services.UserDetailsServicesImpl;
@@ -24,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private UserDetailsServicesImpl userDetailServiceImpl;
 
   @Autowired
-  private AuthEntryPoint authEntryPoint;
+  private AuthentEntryPoint authEntryPoint;
 
   @Bean
   public CorsConfig jwtFilter(){
@@ -56,5 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     .anyRequest().authenticated();
 
     http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder(){
+    return new BCryptPasswordEncoder();
   }
 }

@@ -1,13 +1,21 @@
 package com.sicumi.project.sicumi.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sicumi.project.sicumi.config.JwtUtil;
 import com.sicumi.project.sicumi.exception.custom.CustomNullException;
 import com.sicumi.project.sicumi.model.User;
 import com.sicumi.project.sicumi.model.dto.ChangePasswordRequest;
@@ -22,18 +30,25 @@ import com.sicumi.project.sicumi.validator.UserValidator;
 @Transactional
 public class UserServicesImpl implements UserServices {
 
-  ResponseData<Object> responseData;
+  private ResponseData<Object> responseData;
 
-  User user;
+  private User user;
   
-  List<User> userList;
+  private List<User> userList;
+
+  private Map<String, Object> data;
   
   @Autowired
-  UserValidator userValidator;
+  private UserValidator userValidator;
 
   @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
   
+  @Autowired
+  private JwtUtil jwtUtil;
 
   @Override
   public ResponseData<Object> getUserLogin(LoginRequest loginData) throws CustomNullException {
@@ -43,7 +58,21 @@ public class UserServicesImpl implements UserServices {
   user = userList.get(0);
   userValidator.checkPasswordValidation(loginData.getPassword(), user.getPassword());
   
-  responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Login Success", user);
+    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(),
+        loginData.getPassword());
+    Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    // String token = jwtUtil.generateJwToken(authentication);
+    // UserDetails userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+
+    // data = new HashMap<>();
+    // data.put("token", token);
+    // data.put("email", userDetails.getUsername());
+  
+  responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Login Success", data);
   return responseData;
 }
 
@@ -61,7 +90,6 @@ public class UserServicesImpl implements UserServices {
 
 @Override
 public ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) throws CustomNullException {
-  userList = new ArrayList<>(userRepository.findByEmail(resetPassword.getEmail()));
   userList = new ArrayList<>(userRepository.findByEmail(resetPassword.getEmail()));
   user = userList.get(0);
   user.setPassword(resetPassword.getPassword());

@@ -11,7 +11,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuhtEntryPoint implements AuthenticationEntryPoint{
+public class AuthentEntryPoint implements AuthenticationEntryPoint{
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)

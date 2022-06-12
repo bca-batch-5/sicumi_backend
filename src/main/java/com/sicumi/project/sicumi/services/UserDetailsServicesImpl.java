@@ -35,7 +35,7 @@ public class UserDetailsServicesImpl implements UserDetailsService {
     }
     user = userList.get(0);
 
-    String role = "Admin";
+    String role = "USER";
     
     return userDetailsImpl.build(user,role);
   }
