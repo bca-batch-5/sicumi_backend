@@ -17,10 +17,10 @@ public class UserDetailsImpl implements UserDetails {
   private String password;
   private Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl build(User user, String role){
+  public static UserDetailsImpl build(User user, String role){
   List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(role);
-
-  return new UserDetailsImpl(user.getEmail(), user.getEmail(), authorities);
+  
+  return new UserDetailsImpl(user.getEmail(), user.getPassword(), authorities);
   }
 
   @Override

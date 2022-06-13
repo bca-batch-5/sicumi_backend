@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,9 @@ public class UserServicesImpl implements UserServices {
   @Autowired
   private JwtUtil jwtUtil;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
   @Override
   public ResponseData<Object> getUserLogin(LoginRequest loginData) throws CustomNullException {
   userList = new ArrayList<>(userRepository.findByEmail(loginData.getEmail()));
@@ -58,19 +62,18 @@ public class UserServicesImpl implements UserServices {
   user = userList.get(0);
   userValidator.checkPasswordValidation(loginData.getPassword(), user.getPassword());
   
-    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(),
-        loginData.getPassword());
+  
+    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword());
     Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    // String token = jwtUtil.generateJwToken(authentication);
-    // UserDetails userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    String token = jwtUtil.generateJwToken(authentication);
+    UserDetails userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 
-    // data = new HashMap<>();
-    // data.put("token", token);
-    // data.put("email", userDetails.getUsername());
+    data = new HashMap<>();
+    data.put("token", token);
+    data.put("email", userDetails.getUsername());
   
   responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Login Success", data);
   return responseData;
@@ -82,6 +85,7 @@ public class UserServicesImpl implements UserServices {
   userValidator.availableEmailValidation(userList);
 
   user = new User(signUpData.getName(), signUpData.getEmail(), signUpData.getPassword(), signUpData.getPin());
+  user.setPassword(passwordEncoder.encode(signUpData.getPassword()));
   userRepository.save(user);
 
   responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Signup Success", user);

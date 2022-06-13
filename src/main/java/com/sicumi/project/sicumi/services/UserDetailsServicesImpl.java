@@ -1,8 +1,5 @@
 package com.sicumi.project.sicumi.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,27 +14,23 @@ import com.sicumi.project.sicumi.repository.UserRepository;
 @Transactional
 public class UserDetailsServicesImpl implements UserDetailsService {
 
-  List<User> userList;
-
-  User user;
-
   @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
 
-  UserDetailsImpl userDetailsImpl;
-  
-  
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    userList = new ArrayList<>(userRepository.findByEmail(email));
-    if(userList.isEmpty()){
-      throw new UsernameNotFoundException("Email is not registered");
+    // userList = new ArrayList<>(userRepository.findByEmail(email));
+    // if(userList.isEmpty()){
+    //   throw new UsernameNotFoundException("Email is not registered");
+    // }
+    // user = userList.get(0);
+    User user = userRepository.findByEmail(email).get(0);
+    if(user == null){
+      throw new UsernameNotFoundException("Email is not registered 2");
     }
-    user = userList.get(0);
-
-    String role = "USER";
     
-    return userDetailsImpl.build(user,role);
+    String role = "USER";
+    return UserDetailsImpl.build(user,role);
   }
   
 }
