@@ -47,8 +47,4 @@ public class DetailUser {
         Balance = balance;
     }
 
-    public Optional<DetailUser> findById(int id2) {
-        return null;
-    }
-
 }
