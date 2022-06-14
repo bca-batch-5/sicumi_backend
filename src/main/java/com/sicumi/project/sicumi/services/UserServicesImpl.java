@@ -54,6 +54,9 @@ public class UserServicesImpl implements UserServices {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
+  @Autowired
+  private EmailSenderServices mailService;
+
   @Override
   public ResponseData<Object> getUserLogin(LoginRequest loginData) throws CustomNullException {
   userList = new ArrayList<>(userRepository.findByEmail(loginData.getEmail()));
@@ -96,7 +99,7 @@ public class UserServicesImpl implements UserServices {
 public ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) throws CustomNullException {
   userList = new ArrayList<>(userRepository.findByEmail(resetPassword.getEmail()));
   user = userList.get(0);
-  user.setPassword(resetPassword.getPassword());
+  user.setPassword(passwordEncoder.encode(resetPassword.getPassword()));
   userRepository.save(user);
   
   responseData = new ResponseData<Object>(HttpStatus.ACCEPTED.value(), "Reset Password Success", user);
@@ -107,7 +110,12 @@ public ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) 
 public ResponseData<Object> findEmail(EmailRequest email) throws CustomNullException {
   userList = new ArrayList<>(userRepository.findByEmail(email.getEmail()));
   userValidator.findEmailValidation(userList);
+
+  String localLink = "Click this link : http://localhost:3000/reset/confirm/"+email.getEmail()+" to continue and reset your password";
+  mailService.sendEmail("andre.ayadi46@gmail.com", "Password Reset Request", localLink);
+  
   responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Email Found", email);
   return responseData;
 }
+
 }
