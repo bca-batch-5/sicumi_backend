@@ -57,11 +57,6 @@ public class UserValidator {
         User user = userOpt.get();
         if (userOpt.isPresent()) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String currentpassword = dto.getCurrentpassword();
-
-            String hashedcPassword = passwordEncoder.encode(currentpassword);
-            user.setPassword(hashedcPassword);
-            userRepository.save(user);
             if (passwordEncoder.matches(dto.getCurrentpassword(), user.getPassword())) {
                 if (dto.getNewpassword().equals(dto.getRenewpassword())) {
                     String password = dto.getRenewpassword();
