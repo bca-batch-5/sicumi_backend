@@ -25,10 +25,10 @@ import com.sicumi.project.sicumi.config.FileStorageProperties;
 import com.sicumi.project.sicumi.exception.CustomNullException;
 
 import com.sicumi.project.sicumi.exception.FileStorageException;
-import com.sicumi.project.sicumi.model.User;
+import com.sicumi.project.sicumi.model.DetailUser;
 import com.sicumi.project.sicumi.model.dto.FileInfo;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
-import com.sicumi.project.sicumi.repository.UserRepository;
+import com.sicumi.project.sicumi.repository.DetailUserRepository;
 import com.sicumi.project.sicumi.validation.UserValidator;
 
 @Service
@@ -36,7 +36,7 @@ import com.sicumi.project.sicumi.validation.UserValidator;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    private UserRepository userRepository;
+    private DetailUserRepository detailUserRepository;
 
     @Autowired
     private UserValidator userValidator;
@@ -59,10 +59,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public ResponseData<?> uploadFile(MultipartFile file, int id)
             throws FileStorageException, CustomNullException {
-        Optional<User> userFind = userRepository.findById(id);
+        Optional<DetailUser> userFind = detailUserRepository.findById(id);
         userValidator.notFoundUserValidation(userFind);
 
-        User user = userFind.get();
+        DetailUser detailuser = userFind.get();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
@@ -73,8 +73,8 @@ public class FileServiceImpl implements FileService {
             Path targetPath = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            user.setPhoto(fileName);
-            userRepository.save(user);
+            detailuser.setPhoto(fileName);
+            detailUserRepository.save(detailuser);
 
             String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users").path("/{id}/")
                     .path(fileName)

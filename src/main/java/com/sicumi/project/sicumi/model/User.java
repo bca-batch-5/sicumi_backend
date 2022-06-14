@@ -1,5 +1,7 @@
 package com.sicumi.project.sicumi.model;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,15 +24,6 @@ public class User {
     @Column(nullable = true)
     private String email;
 
-    @Column(unique = true, nullable = true, length = 20)
-    private String username;
-
-    @Column(nullable = true)
-    private String firstname;
-
-    @Column
-    private String lastname;
-
     @Column(nullable = true)
     private String password;
 
@@ -40,18 +33,19 @@ public class User {
     @Column(nullable = true, length = 13)
     private String phone;
 
-    public User(String email, String username, String firstname, String lastname, String password, int pin,
-            String phone) {
+    private Boolean isActive = true;
+    private Date createdOn;
+    private Date lastUpdate;
+
+    public User(String email, String password, Integer pin, String phone, Boolean isActive, Date createdOn,
+            Date lastUpdate) {
         this.email = email;
-        this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
         this.password = password;
         this.pin = pin;
         this.phone = phone;
+        this.isActive = isActive;
+        this.createdOn = createdOn;
+        this.lastUpdate = lastUpdate;
     }
-
-    private Boolean isDeleted = false;
-    private String Photo;
 
 }
