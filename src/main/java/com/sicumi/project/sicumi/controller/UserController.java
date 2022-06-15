@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +19,7 @@ import com.sicumi.project.sicumi.model.dto.NewUserRequest;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.services.UserServices;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -28,7 +29,7 @@ public class UserController {
   @Autowired
   private UserServices userServices;
 
-  @GetMapping("/signin")
+  @PostMapping("/signin")
   public ResponseEntity<?> getUser(@RequestBody @Valid LoginRequest loginData) throws CustomNullException{
     responseData =  userServices.getUserLogin(loginData);
     return ResponseEntity.status(responseData.getStatus()).body(responseData);
@@ -46,9 +47,15 @@ public class UserController {
     return ResponseEntity.status(responseData.getStatus()).body(responseData);
   }
   
-  @GetMapping("/find")
+  @PostMapping("/find")
   public ResponseEntity<?> getEmail(@RequestBody @Valid EmailRequest dataEmail) throws CustomNullException{
     responseData =  userServices.findEmail(dataEmail);
+    return ResponseEntity.status(responseData.getStatus()).body(responseData);
+  }
+  
+  @PostMapping("/check")
+  public ResponseEntity<?> checkEmail(@RequestBody @Valid EmailRequest dataEmail) throws CustomNullException{
+    responseData =  userServices.checkEmail(dataEmail);
     return ResponseEntity.status(responseData.getStatus()).body(responseData);
   }
 }

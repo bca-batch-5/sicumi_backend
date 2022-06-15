@@ -1,6 +1,7 @@
 package com.sicumi.project.sicumi.services;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,11 +111,20 @@ public ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) 
 public ResponseData<Object> findEmail(EmailRequest email) throws CustomNullException {
   userList = new ArrayList<>(userRepository.findByEmail(email.getEmail()));
   userValidator.findEmailValidation(userList);
-
-  String localLink = "Click this link : http://localhost:3000/reset/confirm/"+email.getEmail()+" to continue and reset your password";
+  String encodedString = Base64.getEncoder().encodeToString(email.getEmail().getBytes());
+  String localLink = "Click this link : http://localhost:3000/reset/confirm/"+encodedString+" to continue and reset your password";
   mailService.sendEmail("andre.ayadi46@gmail.com", "Password Reset Request", localLink);
   
-  responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Email Found", email);
+  responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Email Verification Sended", email);
+  return responseData;
+}
+
+@Override
+public ResponseData<Object> checkEmail(EmailRequest email) throws CustomNullException {
+  userList = new ArrayList<>(userRepository.findByEmail(email.getEmail()));
+  userValidator.availableEmailValidation(userList);
+
+  responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Email Available", email);
   return responseData;
 }
 

@@ -12,4 +12,5 @@ public interface UserServices {
   ResponseData<Object> createNewUser(NewUserRequest signUpData) throws CustomNullException;
   ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) throws CustomNullException;
   ResponseData<Object> findEmail(EmailRequest email) throws CustomNullException;
+  ResponseData<Object> checkEmail(EmailRequest email) throws CustomNullException;
 }
