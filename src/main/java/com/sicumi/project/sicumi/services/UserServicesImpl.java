@@ -112,7 +112,7 @@ public ResponseData<Object> findEmail(EmailRequest email) throws CustomNullExcep
   userList = new ArrayList<>(userRepository.findByEmail(email.getEmail()));
   userValidator.findEmailValidation(userList);
   String encodedString = Base64.getEncoder().encodeToString(email.getEmail().getBytes());
-  String localLink = "Click this link : http://localhost:3000/reset/confirm/"+encodedString+" to continue and reset your password";
+  String localLink = "Click this link : http://localhost:3000/Reset/Confirm/"+encodedString+" to continue and reset your password";
   mailService.sendEmail("andre.ayadi46@gmail.com", "Password Reset Request", localLink);
   
   responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Email Verification Sended", email);
