@@ -2,6 +2,7 @@ package com.sicumi.project.sicumi.services;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,7 @@ public class UserServicesImpl implements UserServices {
 
     data = new HashMap<>();
     data.put("token", token);
+    data.put("userId", user.getId());
     data.put("email", userDetails.getUsername());
   
   responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "Login Success", data);
@@ -101,6 +103,7 @@ public ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) 
   userList = new ArrayList<>(userRepository.findByEmail(resetPassword.getEmail()));
   user = userList.get(0);
   user.setPassword(passwordEncoder.encode(resetPassword.getPassword()));
+  user.setLast_update(new Date());
   userRepository.save(user);
   
   responseData = new ResponseData<Object>(HttpStatus.ACCEPTED.value(), "Reset Password Success", user);
