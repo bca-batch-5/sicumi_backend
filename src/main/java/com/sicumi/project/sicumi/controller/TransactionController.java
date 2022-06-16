@@ -1,5 +1,6 @@
 package com.sicumi.project.sicumi.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -66,5 +67,23 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
 
+    @GetMapping ("/alltrans/{userId}")
+    public ResponseEntity<?> getTransactionByUserId(@PathVariable Integer userId){
+        List<Transaction> sendList= transactionRepository.getBySenderIdId(userId);
+        List<Transaction> receiveList = transactionRepository.getByReceiverIdId(userId);
+
+        List<Object> transList = new ArrayList<>(){{addAll(sendList); addAll(receiveList);}};
+
+        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", transList);
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
+
+    @GetMapping("/contact/{senderId}")
+    public ResponseEntity<?> getContactByUserId(@PathVariable Integer senderId){
+        List<Object> contact = transactionRepository.getContact(senderId);
+
+        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", contact);
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+    }
     
 }

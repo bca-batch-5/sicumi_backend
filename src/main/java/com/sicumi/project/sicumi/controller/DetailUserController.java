@@ -27,4 +27,7 @@ public class DetailUserController {
         responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", detailUser);
         return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
+
+    
+
 }
