@@ -40,11 +40,12 @@ public class Transaction {
 
     private String notes;
 
-    public Transaction(User senderId, User receiverId, Date dateTime, String transType, Integer transAmount, String Notes){
+    public Transaction(User senderId, User receiverId, Date dateTime, String transType, Integer transAmount, String notes){
         this.senderId=senderId;
         this.receiverId=receiverId;
         this.dateTime=dateTime;
         this.transType=transType;
         this.transAmount=transAmount;
+        this.notes= notes;
     }
 }
