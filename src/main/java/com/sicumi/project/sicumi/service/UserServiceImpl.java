@@ -49,8 +49,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseData<Object> updatePhone(int id, UserDto dto) {
-        Optional<User> userOpt = userRepository.findById(id);
-        return userValidator.updatePhoneValidation(userOpt, dto);
+        Optional<DetailUser> detailUserOpt = detailUserRepository.findById(id);
+        return userValidator.updatePhoneValidation(detailUserOpt, dto);
+    }
+
+    @Override
+    public ResponseData<Object> getdUserById(int id) {
+        Optional<DetailUser> detailUserOpt = detailUserRepository.findById(id);
+        return userValidator.getUserByIdValidation(detailUserOpt);
     }
 
 }

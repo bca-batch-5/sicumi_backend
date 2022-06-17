@@ -58,26 +58,37 @@ public class UserValidator {
         if (userOpt.isPresent()) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             if (passwordEncoder.matches(dto.getCurrentpassword(), user.getPassword())) {
-                if (dto.getNewpassword().equals(dto.getRenewpassword())) {
-                    String password = dto.getRenewpassword();
+                String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+                if (dto.getNewpassword() != "" && dto.getNewpassword().matches(regex)) {
+                    if (dto.getNewpassword().equals(dto.getRenewpassword())) {
+                        String password = dto.getRenewpassword();
 
-                    String hashedPassword = passwordEncoder.encode(password);
-                    user.setPassword(hashedPassword);
-                    userRepository.save(user);
+                        String hashedPassword = passwordEncoder.encode(password);
+                        user.setPassword(hashedPassword);
+                        userRepository.save(user);
 
-                    responseData = new ResponseData<>(HttpStatus.OK.value(), "update password success",
-                            user.getPassword());
+                        responseData = new ResponseData<>(HttpStatus.OK.value(), "update password success",
+                                user.getPassword());
 
-                    return responseData;
+                        return responseData;
+                    } else {
+                        responseData = new ResponseData<>(HttpStatus.BAD_REQUEST.value(),
+                                "please enter the same password",
+                                null);
+                        return responseData;
+                    }
+
                 } else {
-                    responseData = new ResponseData<>(HttpStatus.BAD_REQUEST.value(),
-                            "please enter the same password",
+                    responseData = new ResponseData<>(HttpStatus.NOT_ACCEPTABLE.value(),
+                            "password must contain at least one digit(0-9), lower case, uppercase, special character(!@&()) and between 8-20 char ",
                             null);
                     return responseData;
+
                 }
 
             } else {
-                responseData = new ResponseData<>(HttpStatus.BAD_REQUEST.value(), "please enter your current password",
+                responseData = new ResponseData<>(HttpStatus.FORBIDDEN.value(),
+                        "please enter your current password",
                         null);
                 return responseData;
             }
@@ -88,9 +99,8 @@ public class UserValidator {
     }
 
     public ResponseData<Object> updatePinValidation(Optional<User> userOpt, UserDto dto) {
-
+        User user = userOpt.get();
         if (userOpt.isPresent()) {
-            User user = userOpt.get();
             Integer pin = Integer.parseInt(
                     dto.getPin1() + dto.getPin2() + dto.getPin3() + dto.getPin4() + dto.getPin5() + dto.getPin6());
 
@@ -103,15 +113,25 @@ public class UserValidator {
         }
     }
 
-    public ResponseData<Object> updatePhoneValidation(Optional<User> userOpt, UserDto dto) {
+    public ResponseData<Object> updatePhoneValidation(Optional<DetailUser> detailUserOpt,
+            UserDto dto) {
 
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
+        if (detailUserOpt.isPresent()) {
+            if (dto.getPhone() != " " && dto.getPhone().matches("[0-9]+")) {
+                DetailUser detailuser = detailUserOpt.get();
 
-            user.setPhone(dto.getPhone());
-            userRepository.save(user);
-            responseData = new ResponseData<>(HttpStatus.OK.value(), "update phone number success", user.getPhone());
-            return responseData;
+                detailuser.setPhone(dto.getPhone());
+                detailUserRepository.save(detailuser);
+                responseData = new ResponseData<>(HttpStatus.OK.value(), "update phone number success",
+                        detailuser.getPhone());
+                return responseData;
+            } else {
+                responseData = new ResponseData<>(HttpStatus.NOT_ACCEPTABLE.value(),
+                        "phone number must be a number and not null ",
+                        null);
+                return responseData;
+
+            }
         } else {
             throw new DataNotFoundException("user is not found");
         }
@@ -119,9 +139,29 @@ public class UserValidator {
 
     public void notFoundUserValidation(Optional<DetailUser> userFind) throws CustomNullException {
         if (userFind.isEmpty()) {
-            // if (userFind == null) {
-            throw new CustomNullException("User not found.");
+            throw new CustomNullException("User is not found.");
         }
     }
 
+    public ResponseData<Object> getUserByIdValidation(Optional<DetailUser> detailUserOpt) {
+        if (detailUserOpt.isPresent()) {
+            DetailUser detailUser = detailUserOpt.get();
+            responseMap = new HashMap<>();
+            String fullname = detailUser.getFirstname() + " " + detailUser.getLastname();
+            responseMap.put("firstname", detailUser.getFirstname());
+            responseMap.put("lastname", detailUser.getLastname());
+            responseMap.put("fullname", fullname);
+
+            responseMap.put("phone", detailUser.getPhone());
+
+            responseData = new ResponseData<>(HttpStatus.OK.value(), "success",
+                    responseMap);
+            return responseData;
+        } else {
+            responseData = new ResponseData<>(HttpStatus.NOT_FOUND.value(), "user is not found", null);
+            return responseData;
+
+        }
+
+    }
 }

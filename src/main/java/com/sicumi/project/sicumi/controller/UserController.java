@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +29,7 @@ import com.sicumi.project.sicumi.model.dto.UserDto;
 import com.sicumi.project.sicumi.service.FileService;
 import com.sicumi.project.sicumi.service.UserService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/users")
 
@@ -45,7 +47,8 @@ public class UserController {
     public ResponseEntity<?> updateInfo(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updateInfo(id, dto);
-        return ResponseEntity.ok(responseData);
+        return ResponseEntity.status(responseData.getStatus())
+                .body(responseData);
 
     }
 
@@ -53,7 +56,8 @@ public class UserController {
     public ResponseEntity<?> updatePassword(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updatePassword(id, dto);
-        return ResponseEntity.ok(responseData);// dicek ulang
+        return ResponseEntity.status(responseData.getStatus())
+                .body(responseData);
 
     }
 
@@ -61,7 +65,8 @@ public class UserController {
     public ResponseEntity<?> updatePin(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updatePin(id, dto);
-        return ResponseEntity.ok(responseData);
+        return ResponseEntity.status(responseData.getStatus())
+                .body(responseData);
 
     }
 
@@ -69,7 +74,8 @@ public class UserController {
     public ResponseEntity<?> updatePhone(@PathVariable Integer id, @RequestBody UserDto dto) {
 
         responseData = userService.updatePhone(id, dto);
-        return ResponseEntity.ok(responseData);
+        return ResponseEntity.status(responseData.getStatus())
+                .body(responseData);
 
     }
 
@@ -91,6 +97,15 @@ public class UserController {
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+
+        responseData = userService.getdUserById(id);
+        return ResponseEntity.status(responseData.getStatus())
+                .body(responseData);
+
     }
 
 }

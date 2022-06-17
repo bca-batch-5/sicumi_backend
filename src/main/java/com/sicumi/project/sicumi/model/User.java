@@ -30,19 +30,15 @@ public class User {
     @Column(nullable = true, length = 6)
     private Integer pin;
 
-    @Column(nullable = true, length = 13)
-    private String phone;
-
     private Boolean isActive = true;
     private Date createdOn;
     private Date lastUpdate;
 
-    public User(String email, String password, Integer pin, String phone, Boolean isActive, Date createdOn,
+    public User(String email, String password, Integer pin, Boolean isActive, Date createdOn,
             Date lastUpdate) {
         this.email = email;
         this.password = password;
         this.pin = pin;
-        this.phone = phone;
         this.isActive = isActive;
         this.createdOn = createdOn;
         this.lastUpdate = lastUpdate;
