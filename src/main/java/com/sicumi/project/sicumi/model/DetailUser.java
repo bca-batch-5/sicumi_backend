@@ -37,7 +37,7 @@ public class DetailUser {
 
     @OneToOne
     @JoinColumn(name = "id_user")
-    private User user;
+    private User users;
 
     public DetailUser(String firstname, String lastname, String phone, String photo, Integer balance) {
         this.firstname = firstname;

@@ -55,8 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseData<Object> getdUserById(int id) {
+        Optional<User> userOpt = userRepository.findById(id);
         Optional<DetailUser> detailUserOpt = detailUserRepository.findById(id);
-        return userValidator.getUserByIdValidation(detailUserOpt);
+        return userValidator.getUserByIdValidation(userOpt, detailUserOpt);
     }
 
 }

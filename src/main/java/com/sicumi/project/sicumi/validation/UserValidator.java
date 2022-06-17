@@ -14,6 +14,7 @@ import com.sicumi.project.sicumi.model.dto.UserDto;
 import com.sicumi.project.sicumi.repository.DetailUserRepository;
 import com.sicumi.project.sicumi.repository.UserRepository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -65,6 +66,7 @@ public class UserValidator {
 
                         String hashedPassword = passwordEncoder.encode(password);
                         user.setPassword(hashedPassword);
+                        user.setLast_update(new Date());
                         userRepository.save(user);
 
                         responseData = new ResponseData<>(HttpStatus.OK.value(), "update password success",
@@ -101,9 +103,8 @@ public class UserValidator {
     public ResponseData<Object> updatePinValidation(Optional<User> userOpt, UserDto dto) {
         User user = userOpt.get();
         if (userOpt.isPresent()) {
-            Integer pin = Integer.parseInt(
-                    dto.getPin1() + dto.getPin2() + dto.getPin3() + dto.getPin4() + dto.getPin5() + dto.getPin6());
-
+            String pin = dto.getPin1() + dto.getPin2() + dto.getPin3() + dto.getPin4() + dto.getPin5() + dto.getPin6();
+            user.setLast_update(new Date());
             user.setPin(pin);
             userRepository.save(user);
             responseData = new ResponseData<>(HttpStatus.OK.value(), "update pin success", user.getPin());
@@ -143,16 +144,18 @@ public class UserValidator {
         }
     }
 
-    public ResponseData<Object> getUserByIdValidation(Optional<DetailUser> detailUserOpt) {
+    public ResponseData<Object> getUserByIdValidation(Optional<User> userOpt, Optional<DetailUser> detailUserOpt) {
         if (detailUserOpt.isPresent()) {
             DetailUser detailUser = detailUserOpt.get();
+            User user = userOpt.get();
             responseMap = new HashMap<>();
             String fullname = detailUser.getFirstname() + " " + detailUser.getLastname();
             responseMap.put("firstname", detailUser.getFirstname());
             responseMap.put("lastname", detailUser.getLastname());
             responseMap.put("fullname", fullname);
 
-            responseMap.put("phone", detailUser.getPhone());
+            responseMap.put("phone", "+62" + detailUser.getPhone());
+            responseMap.put("email", user.getEmail());
 
             responseData = new ResponseData<>(HttpStatus.OK.value(), "success",
                     responseMap);

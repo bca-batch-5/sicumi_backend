@@ -1,6 +1,6 @@
 package com.sicumi.project.sicumi.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,38 +10,39 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "users")
 @Data
-@NoArgsConstructor
-@Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = true)
+    private String name;
+
     private String password;
 
-    @Column(nullable = true, length = 6)
-    private Integer pin;
+    @Column(nullable = true)
+    private String pin;
 
-    private Boolean isActive = true;
-    private Date createdOn;
-    private Date lastUpdate;
+    private Boolean is_active = true;
 
-    public User(String email, String password, Integer pin, Boolean isActive, Date createdOn,
-            Date lastUpdate) {
+    private Date created_on = new Date();
+
+    private Date last_update = new Date();
+
+    public User(String name, String email, String password, String pin) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.pin = pin;
-        this.isActive = isActive;
-        this.createdOn = createdOn;
-        this.lastUpdate = lastUpdate;
     }
 
+    public User() {
+    }
 }
