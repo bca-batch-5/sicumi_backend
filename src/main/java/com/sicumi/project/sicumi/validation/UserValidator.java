@@ -36,12 +36,13 @@ public class UserValidator {
         User user = userOpt.get();
         DetailUser detailuser = detailUserOpt.get();
         if (userOpt.isPresent()) {
-            detailuser.setFirstname(dto.getFirstname());
+            responseMap = new HashMap<>();
+            user.setName(dto.getFirstname());
+            detailuser.setFirstname(user.getName());
             detailuser.setLastname(dto.getLastname());
             user.setEmail(dto.getEmail());
             detailUserRepository.save(detailuser);
             userRepository.save(user);
-            responseMap = new HashMap<>();
 
             responseMap.put("First Name", detailuser.getFirstname());
             responseMap.put("Last Name", detailuser.getLastname());
@@ -149,10 +150,11 @@ public class UserValidator {
             DetailUser detailUser = detailUserOpt.get();
             User user = userOpt.get();
             responseMap = new HashMap<>();
-            String fullname = detailUser.getFirstname() + " " + detailUser.getLastname();
-            responseMap.put("firstname", detailUser.getFirstname());
+            String fullname = user.getName() + " " + detailUser.getLastname();
+            responseMap.put("firstname", user.getName());
             responseMap.put("lastname", detailUser.getLastname());
             responseMap.put("fullname", fullname);
+            responseMap.put("photo", detailUser.getPhoto());
 
             responseMap.put("phone", "+62" + detailUser.getPhone());
             responseMap.put("email", user.getEmail());
