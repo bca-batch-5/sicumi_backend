@@ -13,5 +13,7 @@ public interface DetailUserRepository extends JpaRepository<DetailUser, Integer>
     DetailUser getByUserIdId(Integer userId);
 
     Optional<DetailUser> findByPhone(String phone);
+
+    Optional<DetailUser> findByUserIdId(Integer userId);
     
 }

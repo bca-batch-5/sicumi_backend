@@ -18,6 +18,7 @@ import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TopUpDto;
 import com.sicumi.project.sicumi.repository.DetailUserRepository;
 import com.sicumi.project.sicumi.repository.TopUpRepository;
+import com.sicumi.project.sicumi.serivice.TopUpService;
 
 @RestController
 @RequestMapping ("/topup")
@@ -28,27 +29,28 @@ public class TopUpController {
     @Autowired
     private DetailUserRepository detailUserRepository;
 
+    @Autowired 
+    private TopUpService topUpService;
+
     ResponseData<Object> responseData;
 
     @PostMapping
     public ResponseEntity<?> createTopUp (@RequestBody TopUpDto topUpDto){
-        Optional<DetailUser> detailUserOps = detailUserRepository.findByPhone(topUpDto.getPhone());
-
-        DetailUser dUser= detailUserOps.get();
-
-        TopUp topUp = new TopUp(topUpDto.getSource(), topUpDto.getAmount(), dUser);
-
-        topUpRepository.save(topUp);
-
-        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess ", topUp);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+       try {
+           return ResponseEntity.status(HttpStatus.OK).body(topUpService.createTopUp(topUpDto));
+       } catch (Exception e) {
+           responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+       }
     }
 
     @GetMapping
     public ResponseEntity<?> getAll(){
-        List<TopUp> topUps = topUpRepository.findAll();
-
-        responseData= new ResponseData<Object>(HttpStatus.OK.value(),"succsess", topUps);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+       try {
+           return ResponseEntity.status(HttpStatus.OK).body(topUpService.getAll());
+       } catch (Exception e) {
+        responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+       }
     }
 }

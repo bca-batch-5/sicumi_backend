@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TransactionDto;
 import com.sicumi.project.sicumi.repository.TransactionRepository;
 import com.sicumi.project.sicumi.repository.UserRepository;
+import com.sicumi.project.sicumi.serivice.TransactionService;
 
 @RestController
 @RequestMapping("/transaction")
@@ -31,59 +34,59 @@ public class TransactionController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TransactionService transactionService;
     ResponseData <Object> responseData;
 
     @PostMapping
     public ResponseEntity<?> createTransaction ( @RequestBody TransactionDto transactionDto){
-        Optional<User> senderOps = userRepository.findById(transactionDto.getSenderId());
-        Optional<User> receiverOps = userRepository.findById(transactionDto.getReceiverId());
-
-        User sender = senderOps.get();
-        User receiver = receiverOps.get();
-
-        
-        Transaction transaction = new Transaction(sender, receiver, new Date(), "Transfer", transactionDto.getTransAmount(), transactionDto.getNotes());
-
-        transactionRepository.save(transaction);
-
-        responseData= new ResponseData<Object>(HttpStatus.OK.value(), "succsess", transaction);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(transactionService.createTransaction(transactionDto));
+        } catch (Exception e) {
+        responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), responseData);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+    }
     }
 
     @GetMapping 
     public ResponseEntity <?> getAll(){
-        List<Transaction> transactions = transactionRepository.findAll();
-        
-        responseData= new ResponseData<Object>(HttpStatus.OK.value(), "succsess", transactions);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll());
+        } catch (Exception e) {
+            responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+        }
     
     }
 
     @GetMapping("/{senderId}")
     public ResponseEntity<?> getTransactionDialy(@PathVariable Integer senderId){
-        List<Object> transactions = transactionRepository.getTransactionDaily(senderId);
-
-        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", transactions);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+       try {
+           return ResponseEntity.status(HttpStatus.OK).body(transactionService.getTransactionDialy(senderId));
+       } catch (Exception e) {
+           responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+       }
     }
 
     @GetMapping ("/alltrans/{userId}")
     public ResponseEntity<?> getTransactionByUserId(@PathVariable Integer userId){
-        List<Transaction> sendList= transactionRepository.getBySenderIdId(userId);
-        List<Transaction> receiveList = transactionRepository.getByReceiverIdId(userId);
-
-        List<Object> transList = new ArrayList<>(){{addAll(sendList); addAll(receiveList);}};
-
-        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", transList);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+       try {
+           return ResponseEntity.status(HttpStatus.OK.value()).body(transactionService.getTransactionByUserId(userId));
+       } catch (Exception e) {
+           responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+       }
     }
 
     @GetMapping("/contact/{senderId}")
     public ResponseEntity<?> getContactByUserId(@PathVariable Integer senderId){
-        List<Object> contact = transactionRepository.getContact(senderId);
-
-        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", contact);
-        return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(transactionService.getContactByUserId(senderId));
+        } catch (Exception e) {
+            responseData = new ResponseData<Object>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseData);
+        }
     }
     
 }
