@@ -27,7 +27,7 @@ import com.sicumi.project.sicumi.model.dto.LoginRequest;
 import com.sicumi.project.sicumi.model.dto.NewUserRequest;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.repository.UserRepository;
-import com.sicumi.project.sicumi.validator.UserValidator;
+import com.sicumi.project.sicumi.validator.UserValidator2;
 
 @Service
 @Transactional
@@ -42,7 +42,7 @@ public class UserServicesImpl implements UserServices {
   private Map<String, Object> data;
   
   @Autowired
-  private UserValidator userValidator;
+  private UserValidator2 userValidator;
 
   @Autowired
   private UserRepository userRepository;

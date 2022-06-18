@@ -11,7 +11,7 @@ import com.sicumi.project.sicumi.model.User;
 import com.sicumi.project.sicumi.repository.UserRepository;
 
 @Service
-public class UserValidator {
+public class UserValidator2 {
   
   User user;
 
