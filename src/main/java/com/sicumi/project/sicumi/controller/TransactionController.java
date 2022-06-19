@@ -1,15 +1,11 @@
 package com.sicumi.project.sicumi.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
-import javax.net.ssl.HttpsURLConnection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,22 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sicumi.project.sicumi.model.Transaction;
-import com.sicumi.project.sicumi.model.User;
+
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TransactionDto;
-import com.sicumi.project.sicumi.repository.TransactionRepository;
-import com.sicumi.project.sicumi.repository.UserRepository;
-import com.sicumi.project.sicumi.serivice.TransactionService;
-
+import com.sicumi.project.sicumi.services.TransactionService;
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
-    @Autowired
-    private TransactionRepository transactionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private TransactionService transactionService;

@@ -1,4 +1,4 @@
-package com.sicumi.project.sicumi.serivice;
+package com.sicumi.project.sicumi.services;
 
 import java.util.Optional;
 
@@ -12,13 +12,17 @@ import com.sicumi.project.sicumi.model.DetailUser;
 import com.sicumi.project.sicumi.model.dto.DetailUserDto;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.repository.DetailUserRepository;
-
 @Service
 @Transactional
 public class DetailUserImpl implements DetailUserService {
+    
     private ResponseData<Object> responseData;
 
-    @Autowired 
+    // @Autowired
+    // private ModelMapper mapper;
+   
+
+    @Autowired
     private DetailUserRepository detailUserRepository;
 
 
@@ -48,5 +52,27 @@ public class DetailUserImpl implements DetailUserService {
             return responseData;
         }
     }
+
+    @Override
+    public ResponseData<Object> getAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+
+    //  @Override
+    // public ResponseData<Object> getAll() {
+    //     List <DetailUser> detailUsers = detailUserRepository.findAll();
+    //     List<DetailUserDto> detailUserDtos = new ArrayList<>();
+
+    //     for (int i=0; i<detailUsers.size();i++) {
+    //       detailUserDtos.add(mapper.map(detailUsers.get(i), DetailUserDto.class));
+    //     }
+    //     responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "data ditemukan", detailUserDtos);
+    //     return responseData;
+    // }
     
+
+
 }

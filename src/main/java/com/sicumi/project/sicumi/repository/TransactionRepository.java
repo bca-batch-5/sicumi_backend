@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.sicumi.project.sicumi.model.DetailUser;
 import com.sicumi.project.sicumi.model.Transaction;
 
 @Repository
@@ -19,5 +18,5 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
     List<Object> getTransactionDaily (Integer senderId);
 
    @Query(value = "select * from detail_user b WHERE b.id_user In (select receiver_id from transaction where sender_id = ? )",nativeQuery = true)
-    List<Object> getContact (Integer sendeId);
+    List<Object> getContact (Integer userId);
 }

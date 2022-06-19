@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+
 public class LoginRequest {
 
   @Email(message = "Email must be contain @ and .[com]")

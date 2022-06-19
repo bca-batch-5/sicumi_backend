@@ -1,4 +1,4 @@
-package com.sicumi.project.sicumi.serivice;
+package com.sicumi.project.sicumi.services;
 
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TransactionDto;
@@ -12,5 +12,5 @@ public interface TransactionService {
 
     ResponseData <Object> getTransactionByUserId(Integer userId);
 
-    ResponseData <Object> getContactByUserId(Integer senderId);
+    ResponseData <Object> getContactByUserId(Integer userId);
 }

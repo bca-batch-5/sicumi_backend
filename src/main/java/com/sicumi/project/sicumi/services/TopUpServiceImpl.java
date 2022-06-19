@@ -1,4 +1,4 @@
-package com.sicumi.project.sicumi.serivice;
+package com.sicumi.project.sicumi.services;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.sicumi.project.sicumi.serivice;
+package com.sicumi.project.sicumi.services;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,11 +9,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import com.sicumi.project.sicumi.model.Transaction;
 import com.sicumi.project.sicumi.model.User;
+import com.sicumi.project.sicumi.model.dto.DetailUserDto;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TransactionDto;
 import com.sicumi.project.sicumi.repository.TransactionRepository;
@@ -77,9 +78,8 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public ResponseData<Object> getContactByUserId(Integer senderId) {
-        List<Object> contact = transactionRepository.getContact(senderId);
-
+    public ResponseData<Object> getContactByUserId(Integer userId) {
+        List<Object> contact = transactionRepository.getContact(userId);
         responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", contact);
 
         return responseData;

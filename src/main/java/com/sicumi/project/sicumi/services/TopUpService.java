@@ -1,4 +1,4 @@
-package com.sicumi.project.sicumi.serivice;
+package com.sicumi.project.sicumi.services;
 
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TopUpDto;
