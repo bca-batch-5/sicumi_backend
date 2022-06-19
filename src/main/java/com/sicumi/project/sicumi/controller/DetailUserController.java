@@ -53,7 +53,7 @@ public class DetailUserController {
 
     @GetMapping
     public ResponseEntity<?> getAll(){
-        responseData = detailUserService.getAll();
+        responseData = detailUserService.getAllContact();
         return ResponseEntity.status(responseData.getStatus()).body(responseData);
     }
 

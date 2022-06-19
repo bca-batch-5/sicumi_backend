@@ -22,16 +22,19 @@ public class DetailUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = true)
+    @Column(name = "firstname",nullable = true)
     private String firstname;
 
-    @Column
+    @Column(name = "lastname")
     private String lastname;
 
-    @Column(nullable = true, length = 13, unique = true)
+    @Column(name = "phone",nullable = true, length = 13, unique = true)
     private String phone;
 
+    @Column(name = "photo")
     private String photo;
+
+    @Column(name = "balance")
     private Integer balance;
 
     @OneToOne

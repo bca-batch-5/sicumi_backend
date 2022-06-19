@@ -1,9 +1,12 @@
 package com.sicumi.project.sicumi.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,16 +15,17 @@ import com.sicumi.project.sicumi.model.DetailUser;
 import com.sicumi.project.sicumi.model.dto.DetailUserDto;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.repository.DetailUserRepository;
+
+
 @Service
 @Transactional
 public class DetailUserImpl implements DetailUserService {
     
     private ResponseData<Object> responseData;
 
-    // @Autowired
-    // private ModelMapper mapper;
+    @Autowired
+    private ModelMapper modelMapper;
    
-
     @Autowired
     private DetailUserRepository detailUserRepository;
 
@@ -53,26 +57,15 @@ public class DetailUserImpl implements DetailUserService {
         }
     }
 
-    @Override
-    public ResponseData<Object> getAll() {
-        // TODO Auto-generated method stub
-        return null;
+     @Override
+    public ResponseData<Object> getAllContact() {
+        List <DetailUser> detailUsers = detailUserRepository.findAll();
+        List<DetailUserDto> detailUserDtos = new ArrayList<>();
+
+        for (int i=0; i<detailUsers.size();i++) {
+          detailUserDtos.add(modelMapper.map(detailUsers.get(i), DetailUserDto.class));
+        }
+        responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "data ditemukan", detailUserDtos);
+        return responseData;
     }
-
-
-
-    //  @Override
-    // public ResponseData<Object> getAll() {
-    //     List <DetailUser> detailUsers = detailUserRepository.findAll();
-    //     List<DetailUserDto> detailUserDtos = new ArrayList<>();
-
-    //     for (int i=0; i<detailUsers.size();i++) {
-    //       detailUserDtos.add(mapper.map(detailUsers.get(i), DetailUserDto.class));
-    //     }
-    //     responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "data ditemukan", detailUserDtos);
-    //     return responseData;
-    // }
-    
-
-
 }
