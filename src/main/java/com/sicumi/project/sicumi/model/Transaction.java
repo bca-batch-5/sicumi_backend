@@ -2,6 +2,7 @@ package com.sicumi.project.sicumi.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,22 +31,27 @@ public class Transaction {
     @JoinColumn (name =  "receiver_id")
     private User receiverId;
 
+    @Column (name = "date_time")
     private Date dateTime;
 
+    @Column(name = "trans_type")
     private String transType;
 
+    @Column (name ="status")
     private String status;
 
-    private Integer transAmount;
+    @Column (name = "transAmount")
+    private Integer Amount;
 
+    @Column (name = "notes")
     private String notes;
 
-    public Transaction(User senderId, User receiverId, Date dateTime, String transType, Integer transAmount, String notes){
+    public Transaction(User senderId, User receiverId, Date dateTime, String transType, Integer Amount, String notes){
         this.senderId=senderId;
         this.receiverId=receiverId;
         this.dateTime=dateTime;
         this.transType=transType;
-        this.transAmount=transAmount;
+        this.Amount=Amount;
         this.notes= notes;
     }
 }

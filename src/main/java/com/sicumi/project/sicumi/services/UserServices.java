@@ -2,6 +2,7 @@ package com.sicumi.project.sicumi.services;
 
 import com.sicumi.project.sicumi.exception.custom.CustomNullException;
 import com.sicumi.project.sicumi.model.dto.ChangePasswordRequest;
+import com.sicumi.project.sicumi.model.dto.CheckPinRequest;
 import com.sicumi.project.sicumi.model.dto.EmailRequest;
 import com.sicumi.project.sicumi.model.dto.LoginRequest;
 import com.sicumi.project.sicumi.model.dto.NewUserRequest;
@@ -13,4 +14,5 @@ public interface UserServices {
   ResponseData<Object> changePassword(ChangePasswordRequest resetPassword) throws CustomNullException;
   ResponseData<Object> findEmail(EmailRequest email) throws CustomNullException;
   ResponseData<Object> checkEmail(EmailRequest email) throws CustomNullException;
+  ResponseData<Object> checkPin(CheckPinRequest checkPinRequest, Integer userId);
 }

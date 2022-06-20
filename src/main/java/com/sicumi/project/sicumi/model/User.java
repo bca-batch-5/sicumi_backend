@@ -20,14 +20,16 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(unique = true)
+  @Column(unique = true, name = "email")
   private String email;
 
+  @Column (name = "name")
   private String name;
 
+  @Column (name = "password")
   private String password;
 
-  @Column(nullable = true)
+  @Column(nullable = true, name = "pin")
   private String pin;
 
   private Boolean is_active = true;

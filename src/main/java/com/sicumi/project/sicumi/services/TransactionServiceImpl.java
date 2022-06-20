@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.sicumi.project.sicumi.model.Transaction;
 import com.sicumi.project.sicumi.model.User;
-import com.sicumi.project.sicumi.model.dto.DetailUserDto;
 import com.sicumi.project.sicumi.model.dto.ResponseData;
 import com.sicumi.project.sicumi.model.dto.TransactionDto;
 import com.sicumi.project.sicumi.repository.TransactionRepository;

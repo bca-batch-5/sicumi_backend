@@ -68,4 +68,12 @@ public class DetailUserImpl implements DetailUserService {
         responseData = new ResponseData<Object>(HttpStatus.FOUND.value(), "data ditemukan", detailUserDtos);
         return responseData;
     }
+
+    @Override
+    public ResponseData<Object> getReceiver(Integer userId) {
+        DetailUser detailUser = detailUserRepository.getByUserIdId(userId);
+
+        responseData = new ResponseData<Object>(HttpStatus.OK.value(), "succsess", detailUser);
+        return responseData;
+    }
 }
